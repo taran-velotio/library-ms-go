@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Library microservice")
+	fmt.Println("Library-microservice")
 }
