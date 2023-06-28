@@ -8,7 +8,7 @@ func GetListOfBooks() {
 
 }
 
-func AddBook() {
+func CreateBook() {
 
 }
 

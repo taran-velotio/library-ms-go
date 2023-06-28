@@ -1,21 +1,21 @@
-package controllers
+package controller
 
-func GetBook() {
-
-}
-
-func ListOfBooks() {
+func GetAuthor() {
 
 }
 
-func AddBook() {
+func GetListOfAuthors() {
 
 }
 
-func UpdateBook() {
+func CreateAuthor() {
 
 }
 
-func DeleteBook() {
+func UpdateAuthor() {
+
+}
+
+func DeleteAuthor() {
 
 }
