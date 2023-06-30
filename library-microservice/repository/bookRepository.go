@@ -8,7 +8,7 @@ import (
 
 type BookRepository struct{}
 
-func NewBookRepository() models.BookRepository {
+func NewBookRepository() *BookRepository {
 	return &BookRepository{}
 }
 
@@ -16,7 +16,7 @@ func (repo *BookRepository) GetBook(id int) (models.Book, error) {
 
 	db := db.SetupDB()
 	var book models.Book
-	err := db.QueryRow("SELECT * FROM books WHERE id = $1").Scan(&book.Id, &book.Name, &book.Author, &book.Price)
+	err := db.QueryRow("SELECT * FROM books WHERE id = $1", id).Scan(&book.Id, &book.Name, &book.Author, &book.Price)
 	if err != nil {
 		return models.Book{}, err
 	}
@@ -31,7 +31,7 @@ func (repo *BookRepository) GetListOfBooks() ([]models.Book, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	defer rows.Close()
 	var books []models.Book
 	for rows.Next() {
 

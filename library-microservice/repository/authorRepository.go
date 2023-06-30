@@ -8,7 +8,7 @@ import (
 
 type AuthorRepository struct{}
 
-func NewAuthorRepository() models.AuthorRepository {
+func NewAuthorRepository() *AuthorRepository {
 	return &AuthorRepository{}
 }
 
