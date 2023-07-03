@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"library-comp/models"
-	"library-comp/repository"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,10 +11,10 @@ import (
 )
 
 type BookController struct {
-	bookRepository repository.BookRepository
+	bookRepository models.BookRepository
 }
 
-func NewBookController(repo repository.BookRepository) *BookController {
+func NewBookController(repo models.BookRepository) *BookController {
 	return &BookController{
 		bookRepository: repo,
 	}
@@ -23,6 +22,11 @@ func NewBookController(repo repository.BookRepository) *BookController {
 
 func (t *BookController) GetBook(w http.ResponseWriter, r *http.Request) {
 	bookId := chi.URLParam(r, "id")
+	if bookId == "" {
+		log.Println("Invalid book Id : empty value")
+		http.Error(w, "Invalid book Id", http.StatusBadRequest)
+		return
+	}
 	id, err := strconv.Atoi(bookId)
 
 	if err != nil {

@@ -21,7 +21,7 @@ func main() {
 	bookRepo := repository.NewBookRepository()
 	authorRepo := repository.NewAuthorRepository()
 
-	bookController := controller.NewBookController(*bookRepo)
+	bookController := controller.NewBookController(bookRepo)
 	authorController := controller.NewAuthorController(*authorRepo)
 
 	router := chi.NewRouter()
