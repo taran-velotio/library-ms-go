@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Test@123"
+      POSTGRES_DB: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL="postgresql://postgres:Test@123@db/postgres"
+    ports:
+      - "8080:8080"
+    command: sh -c ./cmd
+
+
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    command: sh -c "go test ./tests"
+
+volumes:
+  pgdata: {}
