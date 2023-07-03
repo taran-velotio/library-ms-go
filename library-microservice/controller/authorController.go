@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"library-comp/models"
-	"library-comp/repository"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,10 +11,10 @@ import (
 )
 
 type AuthorController struct {
-	authorRepository repository.AuthorRepository
+	authorRepository models.AuthorRepository
 }
 
-func NewAuthorController(repo repository.AuthorRepository) *AuthorController {
+func NewAuthorController(repo models.AuthorRepository) *AuthorController {
 	return &AuthorController{
 		authorRepository: repo,
 	}

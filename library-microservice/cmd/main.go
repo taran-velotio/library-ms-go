@@ -22,7 +22,7 @@ func main() {
 	authorRepo := repository.NewAuthorRepository()
 
 	bookController := controller.NewBookController(bookRepo)
-	authorController := controller.NewAuthorController(*authorRepo)
+	authorController := controller.NewAuthorController(authorRepo)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
