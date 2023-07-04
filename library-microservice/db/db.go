@@ -11,10 +11,10 @@ import (
 var db *sql.DB
 
 const (
-	DB_USER     = "postgres"
-	DB_PASSWORD = "Test@123"
-	DB_NAME     = "postgres"
-	DB_HOST     = "127.0.0.1"
+	DB_USER     = "-"
+	DB_PASSWORD = "-"
+	DB_NAME     = "-"
+	DB_HOST     = "db"
 	DB_PORT     = "5432"
 )
 

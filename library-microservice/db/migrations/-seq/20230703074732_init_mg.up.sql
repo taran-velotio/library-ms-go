@@ -9,3 +9,7 @@ CREATE TABLE IF NOT EXISTS authors (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL
 );
+
+
+INSERT INTO books (name, author, price)
+VALUES ('Book1', 'Author1', 10);
