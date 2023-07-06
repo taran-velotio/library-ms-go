@@ -1,0 +1,6 @@
+go 1.20
+
+use (
+	./grpc-library-ms/grpc-library-microservice
+	// ./library-microservice
+)
