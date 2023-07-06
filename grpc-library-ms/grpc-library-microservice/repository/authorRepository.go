@@ -1,8 +1,9 @@
 package repository
 
 import (
+	"context"
 	"library-comp/db"
-	"library-comp/models"
+	"library-comp/proto/author/author"
 	"log"
 )
 
@@ -12,20 +13,24 @@ func NewAuthorRepository() *AuthorRepository {
 	return &AuthorRepository{}
 }
 
-func (repo *AuthorRepository) GetAuthor(id int) (models.Author, error) {
+func (repo *AuthorRepository) GetAuthor(ctx context.Context, req *author.GetAuthorRequest) (*author.GetAuthorResonse, error) {
 
 	db := db.SetupDB()
-	var author models.Author
-	err := db.QueryRow("SELECT * FROM authors WHERE id = $1").Scan(&author.Id, &author.Name)
+	var authorInfo author.Author
+	err := db.QueryRow("SELECT * FROM authors WHERE id = $1", req.GetId()).Scan(&authorInfo.Id, &authorInfo.Name)
 	if err != nil {
-		return models.Author{}, err
+		return &author.GetAuthorResonse{}, err
 	}
 
-	return author, nil
+	response := &author.GetAuthorResonse{
+		Author: &authorInfo,
+	}
+
+	return response, nil
 
 }
 
-func (repo *AuthorRepository) GetListOfAuthors() ([]models.Author, error) {
+func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.GetListOfAuthorsRequest) (*author.GetListOfAuthorsResponse, error) {
 
 	db := db.SetupDB()
 	rows, err := db.Query("SELECT * FROM authors")
@@ -33,50 +38,71 @@ func (repo *AuthorRepository) GetListOfAuthors() ([]models.Author, error) {
 		return nil, err
 	}
 
-	var authors []models.Author
+	var authors []*author.Author
 	for rows.Next() {
 
-		var author models.Author
-		err := rows.Scan(&author.Id, &author.Name)
+		var authorInfo author.Author
+		err := rows.Scan(&authorInfo.Id, &authorInfo.Name)
 		if err != nil {
 			log.Println("Failed to enter author details", err)
 			return nil, err
 		}
-		authors = append(authors, author)
+		authors = append(authors, &authorInfo)
 	}
 
-	return authors, nil
+	response := &author.GetListOfAuthorsResponse{
+		Authors: authors,
+	}
+
+	return response, nil
 }
 
-func (repo *AuthorRepository) CreateAuthor(author models.Author) (models.Author, error) {
+func (repo *AuthorRepository) CreateAuthor(ctx context.Context, req *author.CreateAuthorRequest) (*author.CreateAuthorResponse, error) {
 	db := db.SetupDB()
 
-	err := db.QueryRow("INSERT INTO authors (name) VALUES ($1) RETURNING id", author.Name).Scan(&author.Id)
+	var authorID int32
+	err := db.QueryRow("INSERT INTO authors (name) VALUES ($1) RETURNING id", req.GetName()).Scan(&authorID)
 	if err != nil {
-		return models.Author{}, err
+		return &author.CreateAuthorResponse{}, err
 	}
 
-	return author, nil
+	response := &author.CreateAuthorResponse{
+		Author: &author.Author{
+			Id:   authorID,
+			Name: req.Name,
+		},
+	}
+
+	return response, nil
 }
 
-func (repo *AuthorRepository) UpdateAuthor(author models.Author) (models.Author, error) {
+func (repo *AuthorRepository) UpdateAuthor(ctx context.Context, req *author.UpdateAuthorRequest) (*author.UpdateAuthorResponse, error) {
 	db := db.SetupDB()
 
-	_, err := db.Exec("UPDATE authors SET name = $1, WHERE id = $2", author.Name, author.Id)
+	_, err := db.Exec("UPDATE authors SET name = $1, WHERE id = $2", req.GetName(), req.GetId())
 	if err != nil {
-		return models.Author{}, err
+		return &author.UpdateAuthorResponse{}, err
 	}
 
-	return author, nil
+	response := &author.UpdateAuthorResponse{
+		Author: &author.Author{
+			Id:   req.Id,
+			Name: req.Name,
+		},
+	}
+
+	return response, nil
 }
 
-func (repo *AuthorRepository) DeleteAuthor(id int) error {
+func (repo *AuthorRepository) DeleteAuthor(ctx context.Context, req *author.DeleteAuthorRequest) (*author.DeleteAuthorResponse, error) {
 	db := db.SetupDB()
 
-	_, err := db.Exec("DELETE FROM authors WHERE id = $1", id)
+	_, err := db.Exec("DELETE FROM authors WHERE id = $1", req.GetId())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	response := &author.DeleteAuthorResponse{}
+
+	return response, nil
 }

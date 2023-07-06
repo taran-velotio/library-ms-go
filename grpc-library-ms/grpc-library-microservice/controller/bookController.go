@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"library-comp/models"
+	"library-comp/repository"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,10 +12,10 @@ import (
 )
 
 type BookController struct {
-	bookRepository models.BookRepository
+	bookRepository repository.BookRepository
 }
 
-func NewBookController(repo models.BookRepository) *BookController {
+func NewBookController(repo repository.BookRepository) *BookController {
 	return &BookController{
 		bookRepository: repo,
 	}
