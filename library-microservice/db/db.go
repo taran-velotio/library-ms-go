@@ -32,7 +32,7 @@ func Init() error {
 		return err
 	}
 
-	log.Println("connected to the database", db)
+	log.Println("connected to the - database", db)
 
 	return nil
 }
