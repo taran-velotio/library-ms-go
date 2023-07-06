@@ -1,0 +1,53 @@
+syntax = "proto3";
+package author;
+option go_package = "/author";
+
+message Author {
+    int32 id = 1;
+    string name = 2;
+}
+
+message GetAuthorRequest {
+    int32 id = 1;
+}
+
+message GetAuthorResonse {
+    Author author = 1;
+}
+
+message GetListOfAuthorsRequest{}
+
+message GetListOfAuthorsResponse {
+    repeated Author authors = 1;
+}
+
+message CreateAuthorRequest {
+    string name = 1;
+}
+
+message CreateAuthorResponse {
+    Author author = 1;
+}
+
+message UpdateAuthorRequest {
+    int32 id = 1;
+    string name = 2;
+}
+
+message UpdateAuthorResponse {
+    Author author = 1;
+}
+
+message DeleteAuthorRequest {
+    int32 id = 1;
+}
+
+message DeleteAuthorResponse {}
+
+service BookService {
+    rpc GetAuthor(GetAuthorRequest)returns (GetAuthorResonse){}
+    rpc GetListofAuthors(GetListOfAuthorsRequest) returns (GetListOfAuthorsResponse){}
+    rpc CreateAuthor(CreateAuthorRequest) returns (CreateAuthorResponse){}
+    rpc UpdateAuthor(UpdateAuthorRequest) returns (UpdateAuthorResponse){}
+    rpc DeleteAuthor(DeleteAuthorRequest) returns (DeleteAuthorResponse){}
+}

@@ -1,0 +1,59 @@
+syntax = "proto3";
+package book;
+option go_package = "./book";
+
+message Book {
+    int32 id = 1;
+    string name = 2;
+    string author = 3;
+    int32 price = 4;
+}
+
+message GetBookRequest {
+    int32 id = 1;
+}
+
+message GetBookResonse {
+    Book book = 1;
+}
+
+message GetListOfBooksRequest{}
+
+message GetListOfBooksResponse {
+    repeated Book books = 1;
+}
+
+message CreateBookRequest {
+    string name = 1;
+    string author = 2;
+    int32 price = 3;
+}
+
+message CreateBookResponse {
+    Book book = 1;
+}
+
+message UpdateBookRequest {
+    int32 id = 1;
+    string name = 2;
+    string author = 3;
+    int32 price = 4;
+}
+
+message UpdateBookResponse {
+    Book book = 1;
+}
+
+message DeleteBookRequest {
+    int32 id = 1;
+}
+
+message DeleteBookResponse {}
+
+service BookService {
+    rpc GetBook(GetBookRequest)returns (GetBookResonse){}
+    rpc GetListOfBooks(GetListOfBooksRequest) returns (GetListOfBooksResponse){}
+    rpc CreateBook(CreateBookRequest) returns (CreateBookResponse){}
+    rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse){}
+    rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse){}
+}
