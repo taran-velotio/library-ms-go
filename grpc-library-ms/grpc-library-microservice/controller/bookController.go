@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"library-comp/proto/book/book"
 	"library-comp/repository"
@@ -15,6 +14,7 @@ type BookController struct {
 }
 
 func NewBookController(repo *repository.BookRepository) *BookController {
+	fmt.Println("Coming here")
 	return &BookController{
 		bookRepository: repo,
 	}
@@ -29,20 +29,13 @@ func (t *BookController) GetBook(ctx context.Context, req *book.GetBookRequest) 
 	response := &book.GetBookResonse{
 		Book: bookInfo.Book,
 	}
-	jsonData, err := json.Marshal(response)
-	if err != nil {
-		log.Println("Failed to convert response to JSON:", err)
-		return nil, err
-	}
-	fmt.Println("Printin response = ", jsonData)
-
 	return response, nil
 }
 
 func (t *BookController) GetListOfBooks(ctx context.Context, req *book.GetListOfBooksRequest) (*book.GetListOfBooksResponse, error) {
 	booksInfo, err := t.bookRepository.GetListOfBooks(ctx, req)
 	if err != nil {
-		log.Println("Failed to get list ofbooks", err)
+		log.Println("Failed to get list of books", err)
 		return nil, err
 	}
 

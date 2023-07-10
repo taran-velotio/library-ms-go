@@ -6,11 +6,10 @@ import (
 	"library-comp/db"
 	"library-comp/proto/book/book"
 	"log"
-
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
-type BookRepository struct{}
+type BookRepository struct {
+}
 
 func NewBookRepository() *BookRepository {
 	return &BookRepository{}
@@ -18,20 +17,17 @@ func NewBookRepository() *BookRepository {
 
 func (repo *BookRepository) GetBook(ctx context.Context, req *book.GetBookRequest) (*book.GetBookResonse, error) {
 	db := db.SetupDB()
-	defer db.Close()
 
 	var bookInfo book.Book
 	err := db.QueryRow("SELECT * FROM books WHERE id = $1", req.GetId()).Scan(&bookInfo.Id, &bookInfo.Name, &bookInfo.Author, &bookInfo.Price)
 	if err != nil {
 		return &book.GetBookResonse{}, nil
 	}
+	fmt.Printf("Retrieved book: %+v\n", bookInfo)
 
 	response := &book.GetBookResonse{
 		Book: &bookInfo,
 	}
-	jsonMarshaller := protojson.MarshalOptions{}
-	jsonData, _ := jsonMarshaller.Marshal(response)
-	fmt.Println("Printing getbook json data =", jsonData)
 	return response, nil
 }
 

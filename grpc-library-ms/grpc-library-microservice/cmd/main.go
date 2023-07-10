@@ -1,15 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"library-comp/controller"
 	"library-comp/db"
 	"library-comp/proto/book/book"
 	"library-comp/repository"
 	"log"
 	"net"
+	"net/http"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -17,30 +20,47 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
 	}
-
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		log.Fatalln("Failed to listen:", err)
+	}
 	bookRepo := repository.NewBookRepository()
-	// authorRepo := repository.NewAuthorRepository()
+	// // authorRepo := repository.NewAuthorRepository()
 
 	bookController := controller.NewBookController(bookRepo)
-	// authorController := controller.NewAuthorController(*authorRepo)
+	// // authorController := controller.NewAuthorController(*authorRepo)
+	// Create a gRPC server object
+	s := grpc.NewServer()
+	// Attach the Book service to the server
+	book.RegisterBookServiceServer(s, bookController)
+	// Serve gRPC server
+	log.Println("Serving gRPC on 0.0.0.0:8080")
+	go func() {
+		log.Fatalln(s.Serve(lis))
+	}()
 
-	// Create a gRPC server
-	server := grpc.NewServer()
-
-	//registering grpc controller with servers
-	book.RegisterBookServiceServer(server, bookController)
-
-	address := "localhost:8088"
-
-	lis, err := net.Listen("tcp", address)
+	conn, err := grpc.DialContext(
+		context.Background(),
+		"0.0.0.0:8080",
+		grpc.WithBlock(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
 	if err != nil {
-		log.Fatal("Failed to listen:", err)
+		log.Fatalln("Failed to dial server:", err)
 	}
 
-	fmt.Println("gRPC server starting on", address)
-
-	err = server.Serve(lis)
+	gwmux := runtime.NewServeMux()
+	err = book.RegisterBookServiceHandler(context.Background(), gwmux, conn)
 	if err != nil {
-		log.Fatal("Failed to start gRPC server:", err)
+		log.Fatalln("Failed to register gateway:", err)
 	}
+	//grpc Gateway server
+	gwServer := &http.Server{
+		Addr:    ":8090",
+		Handler: gwmux,
+	}
+
+	log.Println("Serving gRPC-Gateway on http://0.0.0.0:8090")
+	log.Fatalln(gwServer.ListenAndServe())
+
 }
