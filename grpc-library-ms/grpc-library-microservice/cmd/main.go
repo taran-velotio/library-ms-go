@@ -4,45 +4,43 @@ import (
 	"fmt"
 	"library-comp/controller"
 	"library-comp/db"
+	"library-comp/proto/book/book"
 	"library-comp/repository"
 	"log"
-	"net/http"
+	"net"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"google.golang.org/grpc"
 )
 
 func main() {
 	err := db.Init()
 	if err != nil {
-		log.Fatal("failed to connect to the db", err)
+		log.Fatal("Failed to connect to the database:", err)
 	}
 
 	bookRepo := repository.NewBookRepository()
-	authorRepo := repository.NewAuthorRepository()
+	// authorRepo := repository.NewAuthorRepository()
 
 	bookController := controller.NewBookController(bookRepo)
-	authorController := controller.NewAuthorController(authorRepo)
+	// authorController := controller.NewAuthorController(*authorRepo)
 
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
+	// Create a gRPC server
+	server := grpc.NewServer()
 
-	router.Route("/books", func(r chi.Router) {
-		r.Get("/all", bookController.GetListOfBooks)
-		r.Get("/{id}", bookController.GetBook)
-		r.Post("/", bookController.CreateBook)
-		r.Put("/{id}", bookController.UpdateBook)
-		r.Delete("/{id}", bookController.DeleteBook)
-	})
+	//registering grpc controller with servers
+	book.RegisterBookServiceServer(server, bookController)
 
-	router.Route("/authors", func(r chi.Router) {
-		r.Get("/all", authorController.GetListOfAuthors)
-		r.Get("/{id}", authorController.GetAuthor)
-		r.Post("/", authorController.CreateAuthor)
-		r.Put("/{id}", authorController.UpdateAuthor)
-		r.Delete("/{id}", authorController.DeleteAuthor)
-	})
+	address := "localhost:8088"
 
-	fmt.Println("Server starting on localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	lis, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatal("Failed to listen:", err)
+	}
+
+	fmt.Println("gRPC server starting on", address)
+
+	err = server.Serve(lis)
+	if err != nil {
+		log.Fatal("Failed to start gRPC server:", err)
+	}
 }

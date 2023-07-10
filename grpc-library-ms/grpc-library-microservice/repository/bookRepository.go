@@ -2,9 +2,12 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"library-comp/db"
 	"library-comp/proto/book/book"
 	"log"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type BookRepository struct{}
@@ -26,7 +29,9 @@ func (repo *BookRepository) GetBook(ctx context.Context, req *book.GetBookReques
 	response := &book.GetBookResonse{
 		Book: &bookInfo,
 	}
-
+	jsonMarshaller := protojson.MarshalOptions{}
+	jsonData, _ := jsonMarshaller.Marshal(response)
+	fmt.Println("Printing getbook json data =", jsonData)
 	return response, nil
 }
 

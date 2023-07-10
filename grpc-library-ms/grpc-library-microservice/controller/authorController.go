@@ -1,117 +1,78 @@
 package controller
 
 import (
-	"encoding/json"
-	"library-comp/models"
+	"context"
+	"library-comp/proto/author/author"
+	"library-comp/repository"
 	"log"
-	"net/http"
-	"strconv"
-
-	"github.com/go-chi/chi"
 )
 
 type AuthorController struct {
-	authorRepository models.AuthorRepository
+	authorRepository repository.AuthorRepository
 }
 
-func NewAuthorController(repo models.AuthorRepository) *AuthorController {
+func NewAuthorController(repo repository.AuthorRepository) *AuthorController {
 	return &AuthorController{
 		authorRepository: repo,
 	}
 }
 
-func (t *AuthorController) GetAuthor(w http.ResponseWriter, r *http.Request) {
-	authorId := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(authorId)
-
+func (t *AuthorController) GetAuthor(ctx context.Context, req *author.GetAuthorRequest) (*author.GetAuthorResonse, error) {
+	authorInfo, err := t.authorRepository.GetAuthor(ctx, req)
 	if err != nil {
-		log.Println("Invalid Author Id", err)
-		http.Error(w, "Invalid Author Id", http.StatusBadRequest)
-		return
+		log.Println("Failed to get author", err)
+		return nil, err
 	}
 
-	author, err := t.authorRepository.GetAuthor(id)
-	if err != nil {
-		log.Println("Failed to get author Id", err)
-		http.Error(w, "Failed to get author Id", http.StatusInternalServerError)
-		return
-	}
-
-	json.NewEncoder(w).Encode(author)
+	response := authorInfo
+	return response, nil
 }
 
-func (t *AuthorController) GetListOfAuthors(w http.ResponseWriter, r *http.Request) {
-	authors, err := t.authorRepository.GetListOfAuthors()
+func (t *AuthorController) GetListOfAuthors(ctx context.Context, req *author.GetListOfAuthorsRequest) (*author.GetListOfAuthorsResponse, error) {
+	authorsInfo, err := t.authorRepository.GetListOfAuthors(ctx, req)
 	if err != nil {
-		log.Println("Failed to get Authors", err)
-		http.Error(w, "Failed to get Authors", http.StatusInternalServerError)
-		return
+		log.Println("failed to get list of authors", err)
+		return nil, err
 	}
-	json.NewEncoder(w).Encode(authors)
+
+	response := authorsInfo
+
+	return response, nil
 }
 
-func (t *AuthorController) CreateAuthor(w http.ResponseWriter, r *http.Request) {
-	var author models.Author
-	err := json.NewDecoder(r.Body).Decode(&author)
+func (t *AuthorController) CreateAuthor(ctx context.Context, req *author.CreateAuthorRequest) (*author.CreateAuthorResponse, error) {
+	createdAuthor, err := t.authorRepository.CreateAuthor(ctx, req)
 	if err != nil {
-		log.Println("Invalid author data provided", err)
-		http.Error(w, "Invalid author data provided", http.StatusInternalServerError)
-		return
+		log.Println("failed to create author", err)
+		return nil, err
 	}
 
-	createdAuthor, err := t.authorRepository.CreateAuthor(author)
-	if err != nil {
-		log.Println("Failed to create author", err)
-		http.Error(w, "Failed to create author", http.StatusInternalServerError)
-		return
-	}
+	response := createdAuthor
 
-	json.NewEncoder(w).Encode(createdAuthor)
+	return response, nil
 }
 
-func (t *AuthorController) UpdateAuthor(w http.ResponseWriter, r *http.Request) {
-	var author models.Author
-	err := json.NewDecoder(r.Body).Decode(&author)
-	if err != nil {
-		log.Println("Invalid author data", err)
-		http.Error(w, "Invalid author data", http.StatusBadRequest)
-		return
-	}
-
-	// get id from author to update data
-	authorID := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(authorID)
-	if err != nil {
-		log.Println("Invalid author Id", err)
-		http.Error(w, "Invalid author Id", http.StatusBadRequest)
-		return
-	}
-
-	author.Id = id
-	updatedAuthor, err := t.authorRepository.UpdateAuthor(author)
+func (t *AuthorController) UpdateAuthor(ctx context.Context, req *author.UpdateAuthorRequest) (*author.UpdateAuthorResponse, error) {
+	updatedAuthor, err := t.authorRepository.UpdateAuthor(ctx, req)
 	if err != nil {
 		log.Println("Failed to update author", err)
-		http.Error(w, "Failed to update author", http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
-	json.NewEncoder(w).Encode(updatedAuthor)
+	response := updatedAuthor
+
+	return response, nil
 }
 
-func (t *AuthorController) DeleteAuthor(w http.ResponseWriter, r *http.Request) {
-	authorId := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(authorId)
+func (t *AuthorController) DeleteAuthor(ctx context.Context, req *author.DeleteAuthorRequest) (*author.DeleteAuthorResponse, error) {
+
+	deletedAuthor, err := t.authorRepository.DeleteAuthor(ctx, req)
 	if err != nil {
-		log.Println("Invalid author Id", err)
-		http.Error(w, "Invalid author Id", http.StatusBadRequest)
-		return
+		log.Println("Failed to delete an author", err)
+		return nil, err
 	}
 
-	err = t.authorRepository.DeleteAuthor(id)
-	if err != nil {
-		log.Println("Failed to delete author", err)
-		http.Error(w, "Failed to delete author", http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusNoContent)
+	response := deletedAuthor
+
+	return response, nil
 }

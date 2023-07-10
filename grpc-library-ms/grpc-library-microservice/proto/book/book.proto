@@ -1,5 +1,8 @@
 syntax = "proto3";
 package book;
+
+import "annotations.proto";
+
 option go_package = "./book";
 
 message Book {
@@ -51,9 +54,31 @@ message DeleteBookRequest {
 message DeleteBookResponse {}
 
 service BookService {
-    rpc GetBook(GetBookRequest)returns (GetBookResonse){}
-    rpc GetListOfBooks(GetListOfBooksRequest) returns (GetListOfBooksResponse){}
-    rpc CreateBook(CreateBookRequest) returns (CreateBookResponse){}
-    rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse){}
-    rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse){}
+    rpc GetBook(GetBookRequest) returns (GetBookResonse){
+        option(google.api.http) = {
+            get: "/books/{id}"
+        };
+    }
+    rpc GetListOfBooks(GetListOfBooksRequest) returns (GetListOfBooksResponse){
+        option(google.api.http) = {
+            get: "/books/all"
+        };
+    }
+    rpc CreateBook(CreateBookRequest) returns (CreateBookResponse){
+        option(google.api.http) = {
+            post: "/books"
+            body: "*"
+        };
+    }
+    rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse){
+        option(google.api.http) = {
+            put: "/books/{id}"
+            body: "*"
+        };
+    }
+    rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse){
+        option(google.api.http) = {
+            delete: "/books/{id}"
+        };
+    }
 }

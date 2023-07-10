@@ -1,126 +1,108 @@
 package controller
 
 import (
+	"context"
 	"encoding/json"
-	"library-comp/models"
+	"fmt"
+	"library-comp/proto/book/book"
 	"library-comp/repository"
 	"log"
-	"net/http"
-	"strconv"
-
-	"github.com/go-chi/chi"
 )
 
 type BookController struct {
-	bookRepository repository.BookRepository
+	book.UnimplementedBookServiceServer
+	bookRepository *repository.BookRepository
 }
 
-func NewBookController(repo repository.BookRepository) *BookController {
+func NewBookController(repo *repository.BookRepository) *BookController {
 	return &BookController{
 		bookRepository: repo,
 	}
 }
 
-func (t *BookController) GetBook(w http.ResponseWriter, r *http.Request) {
-	bookId := chi.URLParam(r, "id")
-	if bookId == "" {
-		log.Println("Invalid book Id : empty value")
-		http.Error(w, "Invalid book Id", http.StatusBadRequest)
-		return
-	}
-	id, err := strconv.Atoi(bookId)
-
+func (t *BookController) GetBook(ctx context.Context, req *book.GetBookRequest) (*book.GetBookResonse, error) {
+	bookInfo, err := t.bookRepository.GetBook(ctx, req)
 	if err != nil {
-		log.Println("Invalid book Id", err)
-		http.Error(w, "Invalid bookId", http.StatusBadRequest)
-		return
+		log.Println("failed to get book", err)
+		return nil, err
 	}
-
-	book, err := t.bookRepository.GetBook(id)
+	response := &book.GetBookResonse{
+		Book: bookInfo.Book,
+	}
+	jsonData, err := json.Marshal(response)
 	if err != nil {
-		log.Println("Failed to get book", err)
-		http.Error(w, "Failed to get book", http.StatusInternalServerError)
-		return
+		log.Println("Failed to convert response to JSON:", err)
+		return nil, err
 	}
+	fmt.Println("Printin response = ", jsonData)
 
-	json.NewEncoder(w).Encode(book)
+	return response, nil
 }
 
-func (t *BookController) GetListOfBooks(w http.ResponseWriter, r *http.Request) {
-	book, err := t.bookRepository.GetListOfBooks()
+func (t *BookController) GetListOfBooks(ctx context.Context, req *book.GetListOfBooksRequest) (*book.GetListOfBooksResponse, error) {
+	booksInfo, err := t.bookRepository.GetListOfBooks(ctx, req)
 	if err != nil {
-		log.Println("Failed to get books", err)
-		http.Error(w, "Failed to get books", http.StatusInternalServerError)
+		log.Println("Failed to get list ofbooks", err)
+		return nil, err
 	}
 
-	json.NewEncoder(w).Encode(book)
+	//list of books to return
+	var books []*book.Book
+	for _, val := range booksInfo.Books {
+		books = append(books, &book.Book{
+			Id:     val.Id,
+			Name:   val.Name,
+			Author: val.Author,
+			Price:  val.Price,
+		})
+	}
+	response := &book.GetListOfBooksResponse{
+		Books: books,
+	}
+
+	return response, nil
 }
 
-func (t *BookController) CreateBook(w http.ResponseWriter, r *http.Request) {
+func (t *BookController) CreateBook(ctx context.Context, req *book.CreateBookRequest) (*book.CreateBookResponse, error) {
 
-	var book models.Book
-	err := json.NewDecoder(r.Body).Decode(&book)
+	// !Looks like not needed
+	// bookInfo := &book.Book{
+	// 	Name:   req.Name,
+	// 	Author: req.Author,
+	// 	Price:  req.Price,
+	// }
 
-	if err != nil {
-		log.Println("Invalid book details", err)
-		http.Error(w, "Invalid book details", http.StatusBadRequest)
-		return
-	}
-
-	createdBook, err := t.bookRepository.CreateBook(book)
+	createdBook, err := t.bookRepository.CreateBook(ctx, req)
 	if err != nil {
 		log.Println("Failed to create book", err)
-		http.Error(w, "Failed to create book", http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
-	json.NewEncoder(w).Encode(createdBook)
+	response := createdBook
+
+	return response, nil
 }
 
-func (t *BookController) UpdateBook(w http.ResponseWriter, r *http.Request) {
-	var book models.Book
-	err := json.NewDecoder(r.Body).Decode(&book)
+func (t *BookController) UpdateBook(ctx context.Context, req *book.UpdateBookRequest) (*book.UpdateBookResponse, error) {
+
+	updatedBook, err := t.bookRepository.UpdateBook(ctx, req)
 	if err != nil {
-		log.Println("Invalid book data", err)
-		http.Error(w, "Invalid book data", http.StatusBadRequest)
-		return
+		log.Println("Failed to update book", err)
+		return nil, err
 	}
 
-	bookId := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(bookId)
-	if err != nil {
-		log.Println("Invalid book Id", err)
-		http.Error(w, "Invalid book id", http.StatusBadRequest)
-		return
-	}
+	response := updatedBook
 
-	book.Id = id
-	updatedBook, err := t.bookRepository.UpdateBook(book)
-	if err != nil {
-		log.Println("Failed to update Book", err)
-		http.Error(w, "Failed to update Book", http.StatusInternalServerError)
-		return
-	}
-
-	json.NewEncoder(w).Encode(updatedBook)
+	return response, nil
 }
 
-func (t *BookController) DeleteBook(w http.ResponseWriter, r *http.Request) {
-	bookId := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(bookId)
-
+func (t *BookController) DeleteBook(ctx context.Context, req *book.DeleteBookRequest) (*book.DeleteBookResponse, error) {
+	deletedBook, err := t.bookRepository.DeleteBook(ctx, req)
 	if err != nil {
-		log.Println("Invalid book Id", err)
-		http.Error(w, "Invalid book Id", http.StatusBadRequest)
-		return
+		log.Println("failed to delete the book", err)
+		return nil, err
 	}
 
-	err = t.bookRepository.DeleteBook(id)
-	if err != nil {
-		log.Println("Failed to Delete book", err)
-		http.Error(w, "Failed to Delete book", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
+	response := deletedBook
+	return response, nil
 }
