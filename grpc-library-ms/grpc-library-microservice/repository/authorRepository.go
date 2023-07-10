@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"library-comp/db"
 	"library-comp/proto/author/author"
 	"log"
@@ -49,7 +50,7 @@ func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.
 		}
 		authors = append(authors, &authorInfo)
 	}
-
+	fmt.Println("Authors printing = ", authors)
 	response := &author.GetListOfAuthorsResponse{
 		Authors: authors,
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"library-comp/controller"
 	"library-comp/db"
+	"library-comp/proto/author/author"
 	"library-comp/proto/book/book"
 	"library-comp/repository"
 	"log"
@@ -25,14 +26,15 @@ func main() {
 		log.Fatalln("Failed to listen:", err)
 	}
 	bookRepo := repository.NewBookRepository()
-	// // authorRepo := repository.NewAuthorRepository()
+	authorRepo := repository.NewAuthorRepository()
 
 	bookController := controller.NewBookController(bookRepo)
-	// // authorController := controller.NewAuthorController(*authorRepo)
+	authorController := controller.NewAuthorController(authorRepo)
 	// Create a gRPC server object
 	s := grpc.NewServer()
-	// Attach the Book service to the server
+	// Attach the Book and author service to the server
 	book.RegisterBookServiceServer(s, bookController)
+	author.RegisterBookServiceServer(s, authorController)
 	// Serve gRPC server
 	log.Println("Serving gRPC on 0.0.0.0:8080")
 	go func() {
@@ -52,7 +54,11 @@ func main() {
 	gwmux := runtime.NewServeMux()
 	err = book.RegisterBookServiceHandler(context.Background(), gwmux, conn)
 	if err != nil {
-		log.Fatalln("Failed to register gateway:", err)
+		log.Fatalln("Failed to register book gateway:", err)
+	}
+	err = author.RegisterBookServiceHandler(context.Background(), gwmux, conn)
+	if err != nil {
+		log.Fatalln("Failed to register author gateway", err)
 	}
 	//grpc Gateway server
 	gwServer := &http.Server{

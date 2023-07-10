@@ -39,7 +39,6 @@ func (repo *BookRepository) GetListOfBooks(ctx context.Context, req *book.GetLis
 		return nil, err
 	}
 
-	defer rows.Close()
 	var books []*book.Book
 	for rows.Next() {
 

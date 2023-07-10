@@ -8,10 +8,11 @@ import (
 )
 
 type AuthorController struct {
-	authorRepository repository.AuthorRepository
+	author.UnimplementedBookServiceServer
+	authorRepository *repository.AuthorRepository
 }
 
-func NewAuthorController(repo repository.AuthorRepository) *AuthorController {
+func NewAuthorController(repo *repository.AuthorRepository) *AuthorController {
 	return &AuthorController{
 		authorRepository: repo,
 	}
