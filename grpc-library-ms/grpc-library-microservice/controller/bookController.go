@@ -2,7 +2,6 @@ package controller
 
 import (
 	"context"
-	"fmt"
 	"library-comp/proto/book/book"
 	"library-comp/repository"
 	"log"
@@ -14,7 +13,6 @@ type BookController struct {
 }
 
 func NewBookController(repo *repository.BookRepository) *BookController {
-	fmt.Println("Coming here")
 	return &BookController{
 		bookRepository: repo,
 	}
