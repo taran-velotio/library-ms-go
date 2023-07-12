@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"library-comp/db"
-	"library-comp/proto/book/book"
+	"library-comp/proto/book"
 	"log"
 )
 

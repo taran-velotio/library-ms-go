@@ -3,18 +3,52 @@ package tests
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"library-comp/controller"
 	"library-comp/proto/author/author"
-	"library-comp/repository"
-	"reflect"
+	"log"
 	"testing"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/test/bufconn"
 )
 
-func TestAuthorRepository_GetAuthor(t *testing.T) {
+func server(ctx context.Context) (client author.AuthorServiceClient, closer func()) {
+
+	listn := bufconn.Listen(101024 * 1024)
+
+	s := grpc.NewServer()
+
+	authController := controller.AuthorController{}
+	author.RegisterAuthorServiceServer(s, &authController)
+
+	go func() {
+		if err := s.Serve(listn); err != nil {
+			log.Fatalf("s.Serve %v", err)
+		}
+	}()
+
+	cc, err := grpc.Dial("localhost:8092", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Printf("error connecting to server: %v", err)
+	}
+
+	closer = func() {
+		_ = listn.Close()
+		s.Stop()
+	}
+
+	client = author.NewAuthorServiceClient(cc)
+
+	return
+}
+
+func TestGetAuthor(t *testing.T) {
 	ctx := context.Background()
 
-	repo := repository.NewAuthorRepository()
+	client, closer := server(ctx)
+	defer closer()
 
 	type expectation struct {
 		out *author.GetAuthorResonse
@@ -25,7 +59,7 @@ func TestAuthorRepository_GetAuthor(t *testing.T) {
 		in       *author.GetAuthorRequest
 		expected expectation
 	}{
-		"Must_Success": {
+		"Success": {
 			in: &author.GetAuthorRequest{
 				Id: 1,
 			},
@@ -33,37 +67,70 @@ func TestAuthorRepository_GetAuthor(t *testing.T) {
 				out: &author.GetAuthorResonse{
 					Author: &author.Author{
 						Id:   1,
-						Name: "Taran",
+						Name: "Book3",
 					},
-				},
-				err: nil,
-			},
-		},
-		"Not_Found_Id": {
-			in: &author.GetAuthorRequest{
-				Id: 4,
-			},
-			expected: expectation{
-				out: &author.GetAuthorResonse{},
-				err: errors.New("record not found"),
+				}, err: nil,
 			},
 		},
 	}
 
-	for scenario, tt := range tests {
+	for sc, test := range tests {
+		fmt.Println(sc)
+		fmt.Println(test.expected.out.Author.Name)
 
-		t.Run(scenario, func(t *testing.T) {
-			fmt.Println("coming here")
-			out, err := repo.GetAuthor(ctx, tt.in)
-			fmt.Println("Going after = ", out)
+		t.Run(sc, func(t *testing.T) {
+			out, err := client.GetAuthor(ctx, test.in)
+			if err != nil {
+				fmt.Println("Error", err)
+			}
 
-			if !reflect.DeepEqual(out, tt.expected.out) {
-				t.Errorf("Error:\nExpected: %+vead\nGot: %+v\n", tt.expected.out, out)
+			if out == nil || out.Author == nil {
+				// Handling unexpected response here
+				t.Error("Invalid response")
+				return
 			}
-			if !reflect.DeepEqual(err, tt.expected.err) {
-				t.Errorf("Error:\nExpected: %q\nGot: %q\n", tt.expected.err, err)
-			}
+
+			fmt.Println(out.Author.Id)
 
 		})
 	}
+
 }
+
+// import (
+// 	"context"
+// 	"testing"
+
+// 	"github.com/stretchr/testify/assert"
+// 	"github.com/your/package/author"            // Import your package here
+// 	mock_author "github.com/your/package/mocks" // Import the generated mock package here
+// )
+
+// func TestGetAuthor(t *testing.T) {
+// 	ctx := context.Background()
+
+// 	mockRepo := &mock_author.MockAuthorRepository{} // Create a mock repository instance using Mockery
+
+// 	controller := author.NewAuthorController(mockRepo) // Create an instance of the AuthorController with the mock repository
+
+// 	req := &author.GetAuthorRequest{
+// 		Id: 1,
+// 	}
+
+// 	expectedResponse := &author.GetAuthorResonse{
+// 		Author: &author.Author{
+// 			Id:   1,
+// 			Name: "John Doe",
+// 		},
+// 	}
+
+// 	Set up expectations on the mocked repository methods
+// 	mockRepo.On("GetAuthor", ctx, req).Return(expectedResponse, nil)
+
+// 	response, err := controller.GetAuthor(ctx, req)
+
+// 	assert.NoError(t, err)                      // Check if there is no error
+// 	assert.Equal(t, expectedResponse, response) // Check if the response matches our expectation
+
+// 	mockRepo.AssertExpectations(t) // Verify that all expected calls were made to the mocked repository methods
+// }

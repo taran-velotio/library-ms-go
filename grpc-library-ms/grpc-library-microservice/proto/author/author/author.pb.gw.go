@@ -31,7 +31,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_BookService_GetAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client BookServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthorService_GetAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -57,7 +57,7 @@ func request_BookService_GetAuthor_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-func local_request_BookService_GetAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server BookServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthorService_GetAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -83,7 +83,7 @@ func local_request_BookService_GetAuthor_0(ctx context.Context, marshaler runtim
 
 }
 
-func request_BookService_GetListofAuthors_0(ctx context.Context, marshaler runtime.Marshaler, client BookServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthorService_GetListofAuthors_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetListOfAuthorsRequest
 	var metadata runtime.ServerMetadata
 
@@ -92,7 +92,7 @@ func request_BookService_GetListofAuthors_0(ctx context.Context, marshaler runti
 
 }
 
-func local_request_BookService_GetListofAuthors_0(ctx context.Context, marshaler runtime.Marshaler, server BookServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthorService_GetListofAuthors_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetListOfAuthorsRequest
 	var metadata runtime.ServerMetadata
 
@@ -101,7 +101,7 @@ func local_request_BookService_GetListofAuthors_0(ctx context.Context, marshaler
 
 }
 
-func request_BookService_CreateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client BookServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthorService_CreateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -118,7 +118,7 @@ func request_BookService_CreateAuthor_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func local_request_BookService_CreateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server BookServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthorService_CreateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq CreateAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -135,7 +135,7 @@ func local_request_BookService_CreateAuthor_0(ctx context.Context, marshaler run
 
 }
 
-func request_BookService_UpdateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client BookServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthorService_UpdateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -169,7 +169,7 @@ func request_BookService_UpdateAuthor_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func local_request_BookService_UpdateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server BookServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthorService_UpdateAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UpdateAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -203,7 +203,7 @@ func local_request_BookService_UpdateAuthor_0(ctx context.Context, marshaler run
 
 }
 
-func request_BookService_DeleteAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client BookServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_AuthorService_DeleteAuthor_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -229,7 +229,7 @@ func request_BookService_DeleteAuthor_0(ctx context.Context, marshaler runtime.M
 
 }
 
-func local_request_BookService_DeleteAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server BookServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_AuthorService_DeleteAuthor_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DeleteAuthorRequest
 	var metadata runtime.ServerMetadata
 
@@ -255,13 +255,13 @@ func local_request_BookService_DeleteAuthor_0(ctx context.Context, marshaler run
 
 }
 
-// RegisterBookServiceHandlerServer registers the http handlers for service BookService to "mux".
-// UnaryRPC     :call BookServiceServer directly.
+// RegisterAuthorServiceHandlerServer registers the http handlers for service AuthorService to "mux".
+// UnaryRPC     :call AuthorServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterBookServiceHandlerFromEndpoint instead.
-func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server BookServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAuthorServiceHandlerFromEndpoint instead.
+func RegisterAuthorServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuthorServiceServer) error {
 
-	mux.Handle("GET", pattern_BookService_GetAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AuthorService_GetAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -269,12 +269,12 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.BookService/GetAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.AuthorService/GetAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_BookService_GetAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AuthorService_GetAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -282,11 +282,11 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_BookService_GetAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_GetAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_BookService_GetListofAuthors_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AuthorService_GetListofAuthors_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -294,12 +294,12 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.BookService/GetListofAuthors", runtime.WithHTTPPathPattern("/authors/all"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.AuthorService/GetListofAuthors", runtime.WithHTTPPathPattern("/authors/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_BookService_GetListofAuthors_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AuthorService_GetListofAuthors_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -307,11 +307,11 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_BookService_GetListofAuthors_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_GetListofAuthors_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_BookService_CreateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AuthorService_CreateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -319,12 +319,12 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.BookService/CreateAuthor", runtime.WithHTTPPathPattern("/authors"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.AuthorService/CreateAuthor", runtime.WithHTTPPathPattern("/authors"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_BookService_CreateAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AuthorService_CreateAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -332,11 +332,11 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_BookService_CreateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_CreateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_BookService_UpdateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_AuthorService_UpdateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -344,12 +344,12 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.BookService/UpdateAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.AuthorService/UpdateAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_BookService_UpdateAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AuthorService_UpdateAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -357,11 +357,11 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_BookService_UpdateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_UpdateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_BookService_DeleteAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_AuthorService_DeleteAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -369,12 +369,12 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.BookService/DeleteAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/author.AuthorService/DeleteAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_BookService_DeleteAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_AuthorService_DeleteAuthor_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -382,16 +382,16 @@ func RegisterBookServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_BookService_DeleteAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_DeleteAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterBookServiceHandlerFromEndpoint is same as RegisterBookServiceHandler but
+// RegisterAuthorServiceHandlerFromEndpoint is same as RegisterAuthorServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterBookServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterAuthorServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
@@ -411,129 +411,129 @@ func RegisterBookServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 		}()
 	}()
 
-	return RegisterBookServiceHandler(ctx, mux, conn)
+	return RegisterAuthorServiceHandler(ctx, mux, conn)
 }
 
-// RegisterBookServiceHandler registers the http handlers for service BookService to "mux".
+// RegisterAuthorServiceHandler registers the http handlers for service AuthorService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterBookServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterBookServiceHandlerClient(ctx, mux, NewBookServiceClient(conn))
+func RegisterAuthorServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterAuthorServiceHandlerClient(ctx, mux, NewAuthorServiceClient(conn))
 }
 
-// RegisterBookServiceHandlerClient registers the http handlers for service BookService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "BookServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "BookServiceClient"
+// RegisterAuthorServiceHandlerClient registers the http handlers for service AuthorService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AuthorServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AuthorServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "BookServiceClient" to call the correct interceptors.
-func RegisterBookServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client BookServiceClient) error {
+// "AuthorServiceClient" to call the correct interceptors.
+func RegisterAuthorServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AuthorServiceClient) error {
 
-	mux.Handle("GET", pattern_BookService_GetAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AuthorService_GetAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.BookService/GetAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.AuthorService/GetAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_BookService_GetAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AuthorService_GetAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_BookService_GetAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_GetAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_BookService_GetListofAuthors_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_AuthorService_GetListofAuthors_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.BookService/GetListofAuthors", runtime.WithHTTPPathPattern("/authors/all"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.AuthorService/GetListofAuthors", runtime.WithHTTPPathPattern("/authors/all"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_BookService_GetListofAuthors_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AuthorService_GetListofAuthors_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_BookService_GetListofAuthors_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_GetListofAuthors_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_BookService_CreateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_AuthorService_CreateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.BookService/CreateAuthor", runtime.WithHTTPPathPattern("/authors"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.AuthorService/CreateAuthor", runtime.WithHTTPPathPattern("/authors"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_BookService_CreateAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AuthorService_CreateAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_BookService_CreateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_CreateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("PUT", pattern_BookService_UpdateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("PUT", pattern_AuthorService_UpdateAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.BookService/UpdateAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.AuthorService/UpdateAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_BookService_UpdateAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AuthorService_UpdateAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_BookService_UpdateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_UpdateAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_BookService_DeleteAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_AuthorService_DeleteAuthor_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.BookService/DeleteAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/author.AuthorService/DeleteAuthor", runtime.WithHTTPPathPattern("/authors/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_BookService_DeleteAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_AuthorService_DeleteAuthor_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_BookService_DeleteAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_AuthorService_DeleteAuthor_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -541,25 +541,25 @@ func RegisterBookServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_BookService_GetAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
+	pattern_AuthorService_GetAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
 
-	pattern_BookService_GetListofAuthors_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"authors", "all"}, ""))
+	pattern_AuthorService_GetListofAuthors_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"authors", "all"}, ""))
 
-	pattern_BookService_CreateAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"authors"}, ""))
+	pattern_AuthorService_CreateAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"authors"}, ""))
 
-	pattern_BookService_UpdateAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
+	pattern_AuthorService_UpdateAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
 
-	pattern_BookService_DeleteAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
+	pattern_AuthorService_DeleteAuthor_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"authors", "id"}, ""))
 )
 
 var (
-	forward_BookService_GetAuthor_0 = runtime.ForwardResponseMessage
+	forward_AuthorService_GetAuthor_0 = runtime.ForwardResponseMessage
 
-	forward_BookService_GetListofAuthors_0 = runtime.ForwardResponseMessage
+	forward_AuthorService_GetListofAuthors_0 = runtime.ForwardResponseMessage
 
-	forward_BookService_CreateAuthor_0 = runtime.ForwardResponseMessage
+	forward_AuthorService_CreateAuthor_0 = runtime.ForwardResponseMessage
 
-	forward_BookService_UpdateAuthor_0 = runtime.ForwardResponseMessage
+	forward_AuthorService_UpdateAuthor_0 = runtime.ForwardResponseMessage
 
-	forward_BookService_DeleteAuthor_0 = runtime.ForwardResponseMessage
+	forward_AuthorService_DeleteAuthor_0 = runtime.ForwardResponseMessage
 )

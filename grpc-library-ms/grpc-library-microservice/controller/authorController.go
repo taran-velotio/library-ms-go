@@ -8,7 +8,7 @@ import (
 )
 
 type AuthorController struct {
-	author.UnimplementedBookServiceServer
+	author.UnimplementedAuthorServiceServer
 	authorRepository *repository.AuthorRepository
 }
 

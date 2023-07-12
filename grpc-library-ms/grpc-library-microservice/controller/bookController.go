@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	"library-comp/proto/book/book"
+	"library-comp/proto/book"
 	"library-comp/repository"
 	"log"
 )

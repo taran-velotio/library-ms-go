@@ -5,7 +5,7 @@ import (
 	"library-comp/controller"
 	"library-comp/db"
 	"library-comp/proto/author/author"
-	"library-comp/proto/book/book"
+	"library-comp/proto/book"
 	"library-comp/repository"
 	"log"
 	"net"
@@ -34,7 +34,7 @@ func main() {
 	s := grpc.NewServer()
 	// Attach the Book and author service to the server
 	book.RegisterBookServiceServer(s, bookController)
-	author.RegisterBookServiceServer(s, authorController)
+	author.RegisterAuthorServiceServer(s, authorController)
 	// Serve gRPC server
 	log.Println("Serving gRPC on 0.0.0.0:8080")
 	go func() {
@@ -56,7 +56,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("Failed to register book gateway:", err)
 	}
-	err = author.RegisterBookServiceHandler(context.Background(), gwmux, conn)
+	err = author.RegisterAuthorServiceHandler(context.Background(), gwmux, conn)
 	if err != nil {
 		log.Fatalln("Failed to register author gateway", err)
 	}

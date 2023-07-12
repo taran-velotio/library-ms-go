@@ -46,7 +46,7 @@ message DeleteAuthorRequest {
 
 message DeleteAuthorResponse {}
 
-service BookService {
+service AuthorService {
     rpc GetAuthor(GetAuthorRequest)returns (GetAuthorResonse){
         option(google.api.http) = {
             get: "/authors/{id}"
