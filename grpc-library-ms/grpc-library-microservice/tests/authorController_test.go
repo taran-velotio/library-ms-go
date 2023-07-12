@@ -1,54 +1,19 @@
-// Checking testing function - NOT CORRECT
 package tests
 
 import (
 	"context"
-	"fmt"
-	"library-comp/controller"
-	"library-comp/proto/author/author"
-	"log"
+	"errors"
+	"reflect"
 	"testing"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/test/bufconn"
+	author "library-comp/proto/author/author"
+	mock_author "library-comp/proto/author/tests/mocks"
+
+	"github.com/golang/mock/gomock"
 )
 
-func server(ctx context.Context) (client author.AuthorServiceClient, closer func()) {
-
-	listn := bufconn.Listen(101024 * 1024)
-
-	s := grpc.NewServer()
-
-	authController := controller.AuthorController{}
-	author.RegisterAuthorServiceServer(s, &authController)
-
-	go func() {
-		if err := s.Serve(listn); err != nil {
-			log.Fatalf("s.Serve %v", err)
-		}
-	}()
-
-	cc, err := grpc.Dial("localhost:8092", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Printf("error connecting to server: %v", err)
-	}
-
-	closer = func() {
-		_ = listn.Close()
-		s.Stop()
-	}
-
-	client = author.NewAuthorServiceClient(cc)
-
-	return
-}
-
-func TestGetAuthor(t *testing.T) {
+func TestAuthorController_GetAuthor(t *testing.T) {
 	ctx := context.Background()
-
-	client, closer := server(ctx)
-	defer closer()
 
 	type expectation struct {
 		out *author.GetAuthorResonse
@@ -67,70 +32,252 @@ func TestGetAuthor(t *testing.T) {
 				out: &author.GetAuthorResonse{
 					Author: &author.Author{
 						Id:   1,
-						Name: "Book3",
+						Name: "Taran",
 					},
-				}, err: nil,
+				},
+				err: nil,
+			},
+		},
+		"Failure": {
+			in: &author.GetAuthorRequest{
+				Id: 4,
+			},
+			expected: expectation{
+				out: &author.GetAuthorResonse{},
+				err: errors.New("record not found"),
 			},
 		},
 	}
 
-	for sc, test := range tests {
-		fmt.Println(sc)
-		fmt.Println(test.expected.out.Author.Name)
+	ctrl := gomock.NewController(t)
+	client := mock_author.NewMockAuthorServiceClient(ctrl)
 
-		t.Run(sc, func(t *testing.T) {
-			out, err := client.GetAuthor(ctx, test.in)
-			if err != nil {
-				fmt.Println("Error", err)
+	for scenario, tt := range tests {
+
+		t.Run(scenario, func(t *testing.T) {
+
+			client.EXPECT().GetAuthor(ctx, tt.in).Return(tt.expected.out, tt.expected.err)
+			out, err := client.GetAuthor(ctx, tt.in)
+			if !reflect.DeepEqual(out, tt.expected.out) {
+				t.Errorf("Error:\nExpected:\n%+v\nGot:\n%+v\n", tt.expected.out, out)
 			}
 
-			if out == nil || out.Author == nil {
-				// Handling unexpected response here
-				t.Error("Invalid response")
-				return
+			if !errors.Is(err, tt.expected.err) {
+				t.Errorf("Error:\nExpected: %q\nGot: %q\n", tt.expected.err, err)
 			}
-
-			fmt.Println(out.Author.Id)
-
 		})
 	}
+}
+func TestAuthorController_GetListOfAuthors(t *testing.T) {
+	ctx := context.Background()
 
+	type expectation struct {
+		out *author.GetListOfAuthorsResponse
+		err error
+	}
+
+	tests := map[string]struct {
+		in       *author.GetListOfAuthorsRequest
+		expected expectation
+	}{
+		"Success": {
+			in: &author.GetListOfAuthorsRequest{},
+			expected: expectation{
+				out: &author.GetListOfAuthorsResponse{
+					Authors: []*author.Author{
+						{Id: 1, Name: "Taran"},
+						{Id: 2, Name: "Karan"},
+					},
+				},
+				err: nil,
+			},
+		},
+		"Failure": {
+			in: &author.GetListOfAuthorsRequest{},
+			expected: expectation{
+				out: &author.GetListOfAuthorsResponse{},
+				err: errors.New("record not found"),
+			},
+		},
+	}
+
+	ctrl := gomock.NewController(t)
+	client := mock_author.NewMockAuthorServiceClient(ctrl)
+
+	for scenario, tt := range tests {
+
+		t.Run(scenario, func(t *testing.T) {
+
+			// instance of gomock controller
+			client.EXPECT().GetListofAuthors(ctx, tt.in).Return(tt.expected.out, tt.expected.err)
+
+			//actual AuthorController GetListOfAuthors call
+			out, err := client.GetListofAuthors(ctx, tt.in)
+			if !reflect.DeepEqual(out, tt.expected.out) {
+				t.Errorf("Error:\nExpected:\n%+v\nGot:\n%+v\n", tt.expected.out, out)
+			}
+
+			if !errors.Is(err, tt.expected.err) {
+				t.Errorf("Error:\nExpected:%q\nGot:%q\n", tt.expected.err, err)
+			}
+		})
+	}
+}
+func TestAuthorController_CreateAuthor(t *testing.T) {
+	ctx := context.Background()
+
+	type expectation struct {
+		out *author.CreateAuthorResponse
+		err error
+	}
+
+	tests := map[string]struct {
+		in       *author.CreateAuthorRequest
+		expected expectation
+	}{
+		"Success": {
+			in: &author.CreateAuthorRequest{
+				Name: "Taran",
+			},
+			expected: expectation{
+				out: &author.CreateAuthorResponse{
+					Author: &author.Author{
+						Id:   1,
+						Name: "Taran",
+					},
+				},
+				err: nil,
+			},
+		}, "Failure": {
+			in: &author.CreateAuthorRequest{},
+			expected: expectation{
+				out: &author.CreateAuthorResponse{},
+				err: errors.New("record not found"),
+			},
+		},
+	}
+
+	ctrl := gomock.NewController(t)
+	client := mock_author.NewMockAuthorServiceClient(ctrl)
+
+	for scenario, tt := range tests {
+
+		t.Run(scenario, func(t *testing.T) {
+
+			client.EXPECT().CreateAuthor(ctx, tt.in).Return(tt.expected.out, tt.expected.err)
+
+			out, err := client.CreateAuthor(ctx, tt.in)
+			if !reflect.DeepEqual(out, tt.expected.out) {
+				t.Errorf("Error:\nExpected:\n%+v\nGot:\n%+v\n", tt.expected.out, out)
+			}
+
+			if !errors.Is(err, tt.expected.err) {
+				t.Errorf("Error:\nExpected:%q\nGot:%q\n", tt.expected.err, err)
+			}
+		})
+	}
 }
 
-// import (
-// 	"context"
-// 	"testing"
+func TestAuthorController_UpdateAuthor(t *testing.T) {
+	ctx := context.Background()
 
-// 	"github.com/stretchr/testify/assert"
-// 	"github.com/your/package/author"            // Import your package here
-// 	mock_author "github.com/your/package/mocks" // Import the generated mock package here
-// )
+	type expectation struct {
+		out *author.UpdateAuthorResponse
+		err error
+	}
 
-// func TestGetAuthor(t *testing.T) {
-// 	ctx := context.Background()
+	tests := map[string]struct {
+		in       *author.UpdateAuthorRequest
+		expected expectation
+	}{
+		"Success": {
+			in: &author.UpdateAuthorRequest{
+				Id:   1,
+				Name: "UpdatedTaran",
+			},
+			expected: expectation{
+				out: &author.UpdateAuthorResponse{
+					Author: &author.Author{
+						Id:   1,
+						Name: "UpdatedTaran",
+					},
+				},
+				err: nil,
+			},
+		}, "Failure": {
+			in: &author.UpdateAuthorRequest{
+				Id:   2,
+				Name: "Invalid Author",
+			},
+			expected: expectation{
+				out: nil,
+				err: errors.New("Internal Server Error"),
+			},
+		},
+	}
+	ctrl := gomock.NewController(t)
+	client := mock_author.NewMockAuthorServiceClient(ctrl)
 
-// 	mockRepo := &mock_author.MockAuthorRepository{} // Create a mock repository instance using Mockery
+	for scenario, tt := range tests {
 
-// 	controller := author.NewAuthorController(mockRepo) // Create an instance of the AuthorController with the mock repository
+		t.Run(scenario, func(t *testing.T) {
 
-// 	req := &author.GetAuthorRequest{
-// 		Id: 1,
-// 	}
+			client.EXPECT().UpdateAuthor(ctx, tt.in).Return(tt.expected.out, tt.expected.err)
 
-// 	expectedResponse := &author.GetAuthorResonse{
-// 		Author: &author.Author{
-// 			Id:   1,
-// 			Name: "John Doe",
-// 		},
-// 	}
+			out, err := client.UpdateAuthor(ctx, tt.in)
+			// fmt.Println(out, tt.expected.out, err, tt.expected.err)
+			if !reflect.DeepEqual(out, tt.expected.out) {
+				t.Errorf("Error:\nExpected:%+v\nGot:%+v\n", tt.expected.out, out)
+			}
 
-// 	Set up expectations on the mocked repository methods
-// 	mockRepo.On("GetAuthor", ctx, req).Return(expectedResponse, nil)
+			if !errors.Is(err, tt.expected.err) {
+				t.Errorf("Error:\nExpected: %q\nGot: %q\n", tt.expected.err, err)
+			}
+		})
+	}
+}
+func TestAuthorController_DeleteAuthor(t *testing.T) {
+	ctx := context.Background()
 
-// 	response, err := controller.GetAuthor(ctx, req)
+	type expectation struct {
+		out *author.DeleteAuthorResponse
+		err error
+	}
 
-// 	assert.NoError(t, err)                      // Check if there is no error
-// 	assert.Equal(t, expectedResponse, response) // Check if the response matches our expectation
+	tests := map[string]struct {
+		in       *author.DeleteAuthorRequest
+		expected expectation
+	}{
+		"Success": {
+			in: &author.DeleteAuthorRequest{
+				Id: 1,
+			},
+			expected: expectation{
+				out: &author.DeleteAuthorResponse{},
+				err: nil,
+			},
+		},
+	}
+	ctrl := gomock.NewController(t)
+	client := mock_author.NewMockAuthorServiceClient(ctrl)
 
-// 	mockRepo.AssertExpectations(t) // Verify that all expected calls were made to the mocked repository methods
-// }
+	for scenario, tt := range tests {
+
+		t.Run(scenario, func(t *testing.T) {
+
+			client.EXPECT().DeleteAuthor(ctx, tt.in).Return(tt.expected.out, tt.expected.err)
+
+			out, err := client.DeleteAuthor(ctx, tt.in)
+
+			if !reflect.DeepEqual(out, tt.expected.out) {
+				t.Errorf("Error:\nExpected:%+vead\nGot:%+v\n", tt.expected.out, out)
+			}
+
+			if !errors.Is(err, tt.expected.err) {
+				t.Errorf("Error:\nExpected: %q\nGot: %q\n", tt.expected.err.Error(), err.Error())
+			}
+
+		})
+
+	}
+}

@@ -24,7 +24,6 @@ func (t *AuthorController) GetAuthor(ctx context.Context, req *author.GetAuthorR
 		log.Println("Failed to get author", err)
 		return nil, err
 	}
-
 	response := authorInfo
 	return response, nil
 }
@@ -43,13 +42,16 @@ func (t *AuthorController) GetListOfAuthors(ctx context.Context, req *author.Get
 
 func (t *AuthorController) CreateAuthor(ctx context.Context, req *author.CreateAuthorRequest) (*author.CreateAuthorResponse, error) {
 	createdAuthor, err := t.authorRepository.CreateAuthor(ctx, req)
+	if createdAuthor.Author.Name == "" {
+		log.Println("invalid author name provided")
+		return nil, err
+	}
 	if err != nil {
 		log.Println("failed to create author", err)
 		return nil, err
 	}
 
 	response := createdAuthor
-
 	return response, nil
 }
 

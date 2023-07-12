@@ -38,7 +38,6 @@ func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.
 	if err != nil {
 		return nil, err
 	}
-
 	var authors []*author.Author
 	for rows.Next() {
 
@@ -50,7 +49,6 @@ func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.
 		}
 		authors = append(authors, &authorInfo)
 	}
-	fmt.Println("Authors printing = ", authors)
 	response := &author.GetListOfAuthorsResponse{
 		Authors: authors,
 	}
@@ -66,7 +64,10 @@ func (repo *AuthorRepository) CreateAuthor(ctx context.Context, req *author.Crea
 	if err != nil {
 		return &author.CreateAuthorResponse{}, err
 	}
-
+	fmt.Println(req.Name)
+	if req.Name == "" {
+		return nil, err
+	}
 	response := &author.CreateAuthorResponse{
 		Author: &author.Author{
 			Id:   authorID,
