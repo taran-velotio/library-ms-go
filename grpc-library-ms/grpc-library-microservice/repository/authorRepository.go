@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"library-comp/db"
 	"library-comp/proto/author/author"
 	"log"
@@ -64,7 +63,6 @@ func (repo *AuthorRepository) CreateAuthor(ctx context.Context, req *author.Crea
 	if err != nil {
 		return &author.CreateAuthorResponse{}, err
 	}
-	fmt.Println(req.Name)
 	if req.Name == "" {
 		return nil, err
 	}

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"library-comp/db"
 	"library-comp/proto/book"
 	"log"
@@ -23,7 +22,6 @@ func (repo *BookRepository) GetBook(ctx context.Context, req *book.GetBookReques
 	if err != nil {
 		return &book.GetBookResonse{}, nil
 	}
-	fmt.Printf("Retrieved book: %+v\n", bookInfo)
 
 	response := &book.GetBookResonse{
 		Book: &bookInfo,
