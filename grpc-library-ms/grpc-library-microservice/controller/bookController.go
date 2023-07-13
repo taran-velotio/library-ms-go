@@ -5,6 +5,9 @@ import (
 	"library-comp/proto/book"
 	"library-comp/repository"
 	"log"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type BookController struct {
@@ -21,8 +24,9 @@ func NewBookController(repo *repository.BookRepository) *BookController {
 func (t *BookController) GetBook(ctx context.Context, req *book.GetBookRequest) (*book.GetBookResonse, error) {
 	bookInfo, err := t.bookRepository.GetBook(ctx, req)
 	if err != nil {
+		st := status.New(codes.Internal, "Internal server error")
 		log.Println("failed to get book", err)
-		return nil, err
+		return nil, st.Err()
 	}
 	response := &book.GetBookResonse{
 		Book: bookInfo.Book,
@@ -33,8 +37,9 @@ func (t *BookController) GetBook(ctx context.Context, req *book.GetBookRequest) 
 func (t *BookController) GetListOfBooks(ctx context.Context, req *book.GetListOfBooksRequest) (*book.GetListOfBooksResponse, error) {
 	booksInfo, err := t.bookRepository.GetListOfBooks(ctx, req)
 	if err != nil {
+		st := status.New(codes.Internal, "Internal server error")
 		log.Println("Failed to get list of books", err)
-		return nil, err
+		return nil, st.Err()
 	}
 
 	//list of books to return
@@ -56,17 +61,11 @@ func (t *BookController) GetListOfBooks(ctx context.Context, req *book.GetListOf
 
 func (t *BookController) CreateBook(ctx context.Context, req *book.CreateBookRequest) (*book.CreateBookResponse, error) {
 
-	// !Looks like not needed
-	// bookInfo := &book.Book{
-	// 	Name:   req.Name,
-	// 	Author: req.Author,
-	// 	Price:  req.Price,
-	// }
-
 	createdBook, err := t.bookRepository.CreateBook(ctx, req)
 	if err != nil {
+		st := status.New(codes.Internal, "Internal server error")
 		log.Println("Failed to create book", err)
-		return nil, err
+		return nil, st.Err()
 	}
 
 	response := createdBook
@@ -78,8 +77,9 @@ func (t *BookController) UpdateBook(ctx context.Context, req *book.UpdateBookReq
 
 	updatedBook, err := t.bookRepository.UpdateBook(ctx, req)
 	if err != nil {
+		st := status.New(codes.Internal, "Internal server error")
 		log.Println("Failed to update book", err)
-		return nil, err
+		return nil, st.Err()
 	}
 
 	response := updatedBook
@@ -90,8 +90,9 @@ func (t *BookController) UpdateBook(ctx context.Context, req *book.UpdateBookReq
 func (t *BookController) DeleteBook(ctx context.Context, req *book.DeleteBookRequest) (*book.DeleteBookResponse, error) {
 	deletedBook, err := t.bookRepository.DeleteBook(ctx, req)
 	if err != nil {
+		st := status.New(codes.Internal, "Internal server error")
 		log.Println("failed to delete the book", err)
-		return nil, err
+		return nil, st.Err()
 	}
 
 	response := deletedBook

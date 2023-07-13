@@ -15,8 +15,10 @@ func NewBookRepository() *BookRepository {
 }
 
 func (repo *BookRepository) GetBook(ctx context.Context, req *book.GetBookRequest) (*book.GetBookResonse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	var bookInfo book.Book
 	err := db.QueryRow("SELECT * FROM books WHERE id = $1", req.GetId()).Scan(&bookInfo.Id, &bookInfo.Name, &bookInfo.Author, &bookInfo.Price)
 	if err != nil {
@@ -30,13 +32,16 @@ func (repo *BookRepository) GetBook(ctx context.Context, req *book.GetBookReques
 }
 
 func (repo *BookRepository) GetListOfBooks(ctx context.Context, req *book.GetListOfBooksRequest) (*book.GetListOfBooksResponse, error) {
-	db := db.SetupDB()
-	rows, err := db.Query("SELECT * FROM books")
+	db, err := db.Init()
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	rows, err := db.Query("SELECT id, name,author,price FROM books")
 
 	if err != nil {
 		return nil, err
 	}
-
+	defer rows.Close()
 	var books []*book.Book
 	for rows.Next() {
 
@@ -57,8 +62,10 @@ func (repo *BookRepository) GetListOfBooks(ctx context.Context, req *book.GetLis
 }
 
 func (repo *BookRepository) CreateBook(ctx context.Context, req *book.CreateBookRequest) (*book.CreateBookResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	var bookID int32
 	err := db.QueryRow("INSERT INTO books (name,author,price) VALUES ($1,$2,$3) RETURNING id", req.GetName(), req.GetAuthor(), req.GetPrice()).Scan(&bookID)
 	if err != nil {
@@ -78,8 +85,10 @@ func (repo *BookRepository) CreateBook(ctx context.Context, req *book.CreateBook
 }
 
 func (repo *BookRepository) UpdateBook(ctx context.Context, req *book.UpdateBookRequest) (*book.UpdateBookResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	_, err := db.Exec("UPDATE books SET name = $1, author = $2, price = $3 WHERE id = $4", req.GetName(), req.GetAuthor(), req.GetPrice(), req.GetId())
 	if err != nil {
 		return &book.UpdateBookResponse{}, err
@@ -98,8 +107,10 @@ func (repo *BookRepository) UpdateBook(ctx context.Context, req *book.UpdateBook
 }
 
 func (repo *BookRepository) DeleteBook(ctx context.Context, req *book.DeleteBookRequest) (*book.DeleteBookResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	_, err := db.Exec("DELETE FROM books WHERE id = $1", req.GetId())
 	if err != nil {
 		return nil, err

@@ -11,13 +11,15 @@ import (
 	"net"
 	"net/http"
 
+	_ "github.com/lib/pq"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
-	err := db.Init()
+	_, err := db.Init()
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
 	}

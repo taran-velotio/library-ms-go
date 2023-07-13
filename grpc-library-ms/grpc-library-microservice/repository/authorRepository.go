@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"library-comp/db"
 	"library-comp/proto/author/author"
 	"log"
@@ -15,7 +16,10 @@ func NewAuthorRepository() *AuthorRepository {
 
 func (repo *AuthorRepository) GetAuthor(ctx context.Context, req *author.GetAuthorRequest) (*author.GetAuthorResonse, error) {
 
-	db := db.SetupDB()
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	var authorInfo author.Author
 	err := db.QueryRow("SELECT * FROM authors WHERE id = $1", req.GetId()).Scan(&authorInfo.Id, &authorInfo.Name)
 	if err != nil {
@@ -32,12 +36,16 @@ func (repo *AuthorRepository) GetAuthor(ctx context.Context, req *author.GetAuth
 
 func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.GetListOfAuthorsRequest) (*author.GetListOfAuthorsResponse, error) {
 
-	db := db.SetupDB()
-	rows, err := db.Query("SELECT * FROM authors")
+	db, err := db.Init()
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	rows, err := db.Query("SELECT id, name FROM authors")
 	if err != nil {
 		return nil, err
 	}
 	var authors []*author.Author
+	defer rows.Close()
 	for rows.Next() {
 
 		var authorInfo author.Author
@@ -56,8 +64,10 @@ func (repo *AuthorRepository) GetListOfAuthors(ctx context.Context, req *author.
 }
 
 func (repo *AuthorRepository) CreateAuthor(ctx context.Context, req *author.CreateAuthorRequest) (*author.CreateAuthorResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	var authorID int32
 	err := db.QueryRow("INSERT INTO authors (name) VALUES ($1) RETURNING id", req.GetName()).Scan(&authorID)
 	if err != nil {
@@ -77,8 +87,10 @@ func (repo *AuthorRepository) CreateAuthor(ctx context.Context, req *author.Crea
 }
 
 func (repo *AuthorRepository) UpdateAuthor(ctx context.Context, req *author.UpdateAuthorRequest) (*author.UpdateAuthorResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
 	_, err := db.Exec("UPDATE authors SET name = $1, WHERE id = $2", req.GetName(), req.GetId())
 	if err != nil {
 		return &author.UpdateAuthorResponse{}, err
@@ -95,8 +107,11 @@ func (repo *AuthorRepository) UpdateAuthor(ctx context.Context, req *author.Upda
 }
 
 func (repo *AuthorRepository) DeleteAuthor(ctx context.Context, req *author.DeleteAuthorRequest) (*author.DeleteAuthorResponse, error) {
-	db := db.SetupDB()
-
+	db, err1 := db.Init()
+	if err1 != nil {
+		log.Fatalf("Failed to connect to database: %v", err1)
+	}
+	fmt.Println(db)
 	_, err := db.Exec("DELETE FROM authors WHERE id = $1", req.GetId())
 	if err != nil {
 		return nil, err

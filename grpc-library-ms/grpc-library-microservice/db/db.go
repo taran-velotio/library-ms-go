@@ -18,26 +18,22 @@ const (
 	DB_PORT     = "5432"
 )
 
-func Init() error {
+func Init() (*sql.DB, error) {
 	dbinfo := fmt.Sprintf("host =%s port=%s user=%s password=%s dbname=%s sslmode=disable", DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
-	// dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", DB_USER, DB_PASSWORD, DB_NAME)
 
 	var err error
 	db, err = sql.Open("postgres", dbinfo)
 	if err != nil {
 		log.Println("issue in connecting to database")
-		return err
+		return nil, err
 	}
 
 	err = db.Ping()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	log.Println("connected to the database", db)
 
-	return nil
-}
-func SetupDB() *sql.DB {
-	return db
+	return db, nil
 }
